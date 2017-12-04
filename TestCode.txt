@@ -1,0 +1,98 @@
+    @Test
+    public function constructorStartTimeAfterEndTimeTest() {
+        $banner = new Banner("2017-11-05T23:59:59-06:00", "2017-11-02T23:59:59-06:00");
+        $setBefore = $banner->getStartTime();
+        $banner->setStartTime("2017-11-02T23:59:59-06:00");
+        assertEquals($setBefore, $banner->getStartTime());    
+    }
+
+    @Test
+    public function constructorStartTimeBeforeEndTimeTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2017-11-02T23:59:59-06:00");
+        $setBefore = $banner->getStartTime();
+        $banner->setStartTime("2017-11-01T23:59:59-06:00");
+        assertEquals($startTime, $banner->getStartTime());    
+    }
+
+
+    @Test
+    public function ipAddressTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2017-11-02T23:59:59-06:00");
+        $setBefore = $banner->IP;
+        $banner->setIpAddress('10.0.0.1');
+        assertEquals($setBefore, $banner->getIpAddress());  
+    }
+
+
+    @Test
+    public function allowedIpAddressTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2017-11-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.1');
+        assertTrue($banner->checkIp());           
+    }
+
+
+    @Test
+    public function nonAllowedIpAddressTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2017-11-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.3');
+        assertFalse($banner->checkIp());           
+    }
+
+
+    @Test
+    public function allowedIpBeforeStartTimeTest() {
+        $banner = new Banner("2018-11-01T23:59:59-06:00", "2018-12-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.1');
+        $banner->update();
+        assertTrue($banner->isDisplay);
+    }
+
+
+    @Test
+    public function allowedIpAfterEndTimeTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2017-11-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.1');
+        $banner->update();
+        assertFalse($banner->isDisplay);
+    }
+
+
+    @Test
+    public function allowedIpDuringDisplayTimeTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2018-11-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.1');
+        $banner->update();
+        assertTrue($banner->isDisplay);
+    }
+
+
+
+    @Test
+    public function nonAllowedIpBeforeStartTimeTest() {
+        $banner = new Banner("2018-11-01T23:59:59-06:00", "2018-12-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.3');  
+        $banner->update();
+        assertFalse($banner->isDisplay);
+    }
+
+
+    @Test
+    public function nonAllowedIpAfterEndTimeTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2017-11-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.3'); 
+        $banner->update(); 
+        assertFalse($banner->isDisplay);
+    }
+
+
+    @Test
+    public function nonAllowedIpDuringDisplayTimeTest() {
+        $banner = new Banner("2017-11-01T23:59:59-06:00", "2018-11-02T23:59:59-06:00");
+        $banner->setIpAddress('10.0.0.3');
+        $banner->update(); 
+        assertTrue($banner->isDisplay);  
+    }
+
+
+    
